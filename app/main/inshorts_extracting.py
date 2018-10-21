@@ -1,4 +1,5 @@
 import json
+from flask import current_app as app
 from json import JSONDecodeError
 
 import pandas as pd
@@ -19,6 +20,7 @@ class InshortsDownloader:
         """
         result = []
         for category in categories:
+            app.logger.info("Downloading stories for %s", category)
             labeled = []
             offset = ''
             while len(labeled) < min_items:
@@ -32,9 +34,9 @@ class InshortsDownloader:
         params = 'category=' + category + '&news_offset=' + offset
         resp = self.__request('POST', 'https://inshorts.com/en/ajax/more_news', params)
         obj = self.__load_json_safely(resp)
-        stories = {'stories': self.__label(self.__parse_stories_from(obj['html']), category),
+        parsed_stories = self.__parse_stories_from(obj['html'])
+        stories = {'stories': self.__label(parsed_stories, category),
                    'offset': obj['min_news_id']}
-        # pp.pprint(stories)
         return stories
 
     def __label(self, stories, category):

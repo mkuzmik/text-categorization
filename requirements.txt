@@ -1,0 +1,8 @@
+flask
+flask_restful
+bs4
+pandas
+requests
+nltk
+matplotlib
+sklearn

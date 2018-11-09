@@ -6,7 +6,10 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-from app.main.pandas_util import PandasUtil
+from app.main.model.pandas_util import PandasUtil
+
+import dependency_injector.containers as containers
+import dependency_injector.providers as providers
 
 
 class InshortsDownloader:
@@ -70,3 +73,8 @@ class InshortsDfDownloader(InshortsDownloader):
     def extract_inshorts(self, categories, min_items):
         data_frame = pd.DataFrame(self.inshorts_downloader.extract_inshorts(categories, min_items))
         return PandasUtil.shuffle(data_frame)
+
+
+class InshortsDownloaderContainer(containers.DeclarativeContainer):
+
+    instance = providers.Singleton(InshortsDownloader)

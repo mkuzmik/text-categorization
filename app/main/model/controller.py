@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from app.main.category_predicting import Predicter
+from app.main.model.category_predicting import Predicter
 from flask_restful import reqparse
 
 

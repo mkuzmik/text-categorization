@@ -1,6 +1,6 @@
-from app.main.inshorts_extracting import InshortsDfDownloader
-from app.main.text_processing import TextProcessingChain
-from app.main.text_transforming import TextTransformer
+from app.main.data.inshorts_downloader import InshortsDfDownloader
+from app.main.model.text_processing import TextProcessingChain
+from app.main.model.text_transforming import TextTransformer
 from sklearn.naive_bayes import MultinomialNB
 
 

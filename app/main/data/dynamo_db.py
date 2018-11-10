@@ -25,11 +25,19 @@ class DynamoDb(object):
                 {
                     'AttributeName': 'label',
                     'KeyType': 'HASH'
+                },
+                {
+                    'AttributeName': 'content',
+                    'KeyType': 'RANGE'
                 }
             ],
             AttributeDefinitions=[
                 {
                     'AttributeName': 'label',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'content',
                     'AttributeType': 'S'
                 }
 

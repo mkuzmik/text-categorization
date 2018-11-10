@@ -1,13 +1,12 @@
 import dependency_injector.containers as containers
 import dependency_injector.providers as providers
 
-from app.main.data.dynamo_db import DynamoDbContainer
 from app.main.data.inshorts_downloader import InshortsDownloaderContainer
-
+from app.main.data.repository import LabeledContentRepositoryContainer
 
 class DataService(object):
-    def __init__(self, dynamo_connection, inshorts_downloader):
-        self.dynamo_connection = dynamo_connection
+    def __init__(self, repository, inshorts_downloader):
+        self.repository = repository
         self.inshorts_downloader = inshorts_downloader
 
     def fetch(self, source, items_per_cat):
@@ -26,31 +25,10 @@ class DataService(object):
         Fetches items from given source, of given amount and writes it to db.
         """
         data = self.fetch(source, items_per_cat)
-        self.store(data)
-
-    def store(self, data):
-        """
-        Writes given data into dynamo db
-        :param data: list of objects { label, content }
-        """
-        table = self.dynamo_connection.labeled_content
-
-        for entity in data:
-
-            # Watch out! Getting stack overflow without casting (deepcopy issue)
-            # https://github.com/amzn/ion-python/issues/61
-            label = str(entity['label'])
-            content = str(entity['content'])
-
-            table.put_item(
-                Item={
-                    'label': label,
-                    'content': content
-                }
-            )
+        self.repository.write(data)
 
 
 class DataServiceContainer(containers.DeclarativeContainer):
     instance = providers.Singleton(DataService,
-                                   dynamo_connection=DynamoDbContainer.instance(),
+                                   repository=LabeledContentRepositoryContainer.instance(),
                                    inshorts_downloader=InshortsDownloaderContainer.instance())

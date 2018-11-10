@@ -1,9 +1,13 @@
 from flask_restful import Resource, reqparse
 
 from app.main.data.data_service import DataServiceContainer
+from app.main.data.repository import LabeledContentRepositoryContainer
 
 
-class FetchController(Resource):
+class DownloadController(Resource):
+    """
+    /data/download
+    """
     def __init__(self):
         self.data_service = DataServiceContainer.instance()
         self.parser = reqparse.RequestParser()
@@ -15,7 +19,7 @@ class FetchController(Resource):
         source - source of data (ex 'inshorts')
         count - items count per category (ex 123)
 
-        :return:
+        :return: Fetched labeled content
         """
         self.parser.add_argument('source')
         self.parser.add_argument('count')
@@ -24,6 +28,10 @@ class FetchController(Resource):
 
 
 class MigrationController(Resource):
+    """
+    /data/migration
+    """
+
     def __init__(self):
         self.data_service = DataServiceContainer.instance()
         self.parser = reqparse.RequestParser()
@@ -34,3 +42,15 @@ class MigrationController(Resource):
         args = self.parser.parse_args()
         self.data_service.migrate_to_db(args['source'], int(args['count']))
         return '', 201
+
+
+class LabeledContentController(Resource):
+    """
+    /data/labeled-content
+    """
+
+    def __init__(self):
+        self.repository = LabeledContentRepositoryContainer.instance()
+
+    def get(self):
+        return self.repository.scan()

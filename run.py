@@ -2,7 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 from app.main.data.controller import DownloadController, MigrationController, LabeledContentController
-from app.main.model.controller import PredictCategoryController
+from app.main.predicting.controller import PredictCategoryController
 
 app = Flask(__name__)
 api = Api(app)

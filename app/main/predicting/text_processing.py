@@ -2,6 +2,8 @@ import re
 import unicodedata
 from functools import reduce
 
+import dependency_injector.containers as containers
+import dependency_injector.providers as providers
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize.toktok import ToktokTokenizer
@@ -60,3 +62,7 @@ class TextProcessingChain:
 
     def preprocess_series(self, series):
         return reduce(lambda res, fun: list(map(fun, res)), self.applies, series)
+
+
+class TextProcessingContainer(containers.DeclarativeContainer):
+    instance = providers.Singleton(TextProcessingChain)

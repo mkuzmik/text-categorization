@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-from app.main.model.pandas_util import PandasUtil
+from app.main.predicting.pandas_util import PandasUtil
 
 import dependency_injector.containers as containers
 import dependency_injector.providers as providers
@@ -75,15 +75,6 @@ class InshortsDownloader:
             return json.loads(serialized)
         except JSONDecodeError:
             print('ERROR: cannot deserialize json: ' + serialized)
-
-
-class InshortsDfDownloader(InshortsDownloader):
-    def __init__(self):
-        self.inshorts_downloader = InshortsDownloader()
-
-    def extract_inshorts(self, categories, items_per_cat):
-        data_frame = pd.DataFrame(self.inshorts_downloader.extract_inshorts(categories, items_per_cat))
-        return PandasUtil.shuffle(data_frame)
 
 
 class InshortsDownloaderContainer(containers.DeclarativeContainer):

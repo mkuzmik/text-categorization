@@ -87,5 +87,4 @@ class InshortsDfDownloader(InshortsDownloader):
 
 
 class InshortsDownloaderContainer(containers.DeclarativeContainer):
-
     instance = providers.Singleton(InshortsDownloader)

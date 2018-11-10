@@ -7,10 +7,10 @@ class DynamoDb(object):
 
     def __init__(self):
         self.resource = boto3.resource('dynamodb',
-                                  endpoint_url='http://192.168.99.100:8000',
-                                  region_name='us-west-1',
-                                  aws_access_key_id="anything",
-                                  aws_secret_access_key="anything")
+                                       endpoint_url='http://192.168.99.100:8000',
+                                       region_name='us-west-1',
+                                       aws_access_key_id="anything",
+                                       aws_secret_access_key="anything")
         self.on_init()
 
         self.labeled_content = self.resource.Table('labeled_content')
@@ -50,5 +50,4 @@ class DynamoDb(object):
 
 
 class DynamoDbContainer(containers.DeclarativeContainer):
-
     instance = providers.Singleton(DynamoDb)

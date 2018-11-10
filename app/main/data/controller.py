@@ -8,6 +8,7 @@ class DownloadController(Resource):
     """
     /data/download
     """
+
     def __init__(self):
         self.data_service = DataServiceContainer.instance()
         self.parser = reqparse.RequestParser()

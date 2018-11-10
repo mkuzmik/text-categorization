@@ -4,6 +4,7 @@ import dependency_injector.providers as providers
 from app.main.data.inshorts_downloader import InshortsDownloaderContainer
 from app.main.data.repository import LabeledContentRepositoryContainer
 
+
 class DataService(object):
     def __init__(self, repository, inshorts_downloader):
         self.repository = repository

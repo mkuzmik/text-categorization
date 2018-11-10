@@ -13,12 +13,23 @@ import dependency_injector.providers as providers
 
 
 class InshortsDownloader:
-    def extract_inshorts(self, categories, min_items):
+
+    def download(self, items_per_cat):
+        """
+        Extracts inshorts only for suggested categories
+        (To be honest - category "World" doesn't make much sense)
+        :param items_per_cat: items to fetch per category
+        """
+        suggested_categories = ['business', 'sports', 'politics', 'technology', 'science', 'automobile']
+
+        return self.extract_inshorts(suggested_categories, items_per_cat)
+
+    def extract_inshorts(self, categories, items_per_cat):
         """
         Download stories from https://inshorts.com
 
         :param categories: list of categories that you want to download
-        :param min_items: minimal amount of stories per each category
+        :param items_per_cat: minimal amount of stories per each category
         :return: list of (story, category) touples
         """
         result = []
@@ -26,7 +37,7 @@ class InshortsDownloader:
             app.logger.info("Downloading stories for %s", category)
             labeled = []
             offset = ''
-            while len(labeled) < min_items:
+            while len(labeled) < items_per_cat:
                 downloaded = self.__download_for(category, offset)
                 offset = downloaded['offset']
                 labeled += downloaded['stories']
@@ -70,8 +81,8 @@ class InshortsDfDownloader(InshortsDownloader):
     def __init__(self):
         self.inshorts_downloader = InshortsDownloader()
 
-    def extract_inshorts(self, categories, min_items):
-        data_frame = pd.DataFrame(self.inshorts_downloader.extract_inshorts(categories, min_items))
+    def extract_inshorts(self, categories, items_per_cat):
+        data_frame = pd.DataFrame(self.inshorts_downloader.extract_inshorts(categories, items_per_cat))
         return PandasUtil.shuffle(data_frame)
 
 

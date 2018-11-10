@@ -13,6 +13,8 @@ class DynamoDb(object):
                                   aws_secret_access_key="anything")
         self.on_init()
 
+        self.labeled_content = self.resource.Table('labeled_content')
+
     def on_init(self):
         if len(list(self.resource.tables.all())) > 0:
             return

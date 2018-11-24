@@ -5,9 +5,10 @@ from app.main.data.repository import LabeledContentRepositoryContainer
 
 
 class DownloadController(Resource):
-    """
-    /data/download
-    """
+
+    @staticmethod
+    def path():
+        return '/data/download'
 
     def __init__(self):
         self.data_service = DataServiceContainer.instance()
@@ -29,9 +30,10 @@ class DownloadController(Resource):
 
 
 class MigrationController(Resource):
-    """
-    /data/migration
-    """
+
+    @staticmethod
+    def path():
+        return '/data/migration'
 
     def __init__(self):
         self.data_service = DataServiceContainer.instance()
@@ -46,12 +48,16 @@ class MigrationController(Resource):
 
 
 class LabeledContentController(Resource):
-    """
-    /data/labeled-content
-    """
+
+    @staticmethod
+    def path():
+        return '/data/labeled-content'
 
     def __init__(self):
         self.repository = LabeledContentRepositoryContainer.instance()
 
     def get(self):
+        """
+        Returns labeled content table content from repository
+        """
         return self.repository.scan()

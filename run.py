@@ -7,10 +7,15 @@ from app.main.predicting.controller import PredictCategoryController
 app = Flask(__name__)
 api = Api(app)
 
-api.add_resource(PredictCategoryController, '/predict')
-api.add_resource(DownloadController, '/data/download')
-api.add_resource(MigrationController, '/data/migration')
-api.add_resource(LabeledContentController, '/data/labeled-content')
+def add_resource(api, controller):
+    api.add_resource(controller, controller.path())
+    return
+
+
+add_resource(api, PredictCategoryController)
+add_resource(api, DownloadController)
+add_resource(api, MigrationController)
+add_resource(api, LabeledContentController)
 
 if __name__ == '__main__':
     app.run(debug=True)

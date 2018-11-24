@@ -10,7 +10,7 @@ class LabeledContentRepository(object):
         self.table = self.dynamo_connection.labeled_content
 
     def scan(self):
-        return self.table.scan()
+        return self.table.scan()["Items"]
 
     def write(self, data):
         """

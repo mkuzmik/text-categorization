@@ -18,7 +18,19 @@ function pasteSelection() {
         });
 }
 
+// TODO: make parameters configurable
+textRecognizerHost= 'http://localhost:5000/predict?size=200&q=';
+
 function recognize() {
     var result = document.getElementById('result');
-    result.value = 'result here';
+    var text = document.getElementById('text');
+    var xhr = new XMLHttpRequest();
+
+    xhr.open("GET", textRecognizerHost + text.innerHTML, true);
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+            result.value = xhr.responseText;
+        }
+    };
+    xhr.send();
 }

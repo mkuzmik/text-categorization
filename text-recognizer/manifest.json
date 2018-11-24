@@ -1,12 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "Chrome Extension Sample",
-  "description": "This extension lets you manipulate the DOM",
-  "version": "1.0",
+  "name": "Text Recognizer",
+  "description": "Extension for recognizing text.",
+  "version": "0.1",
   "browser_action": {
-    "default_icon": "favicon.png",
     "default_popup": "popup.html",
-    "default_title": "ChromiePop"
+    "default_title": "Text Recognizer"
   },
   "permissions": [
     "tabs",

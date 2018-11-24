@@ -1,6 +1,7 @@
 $(function(){
     $('#paste').click(function(){pasteSelection();});
 });
+
 function pasteSelection() {
     chrome.tabs.query({active:true, windowId: chrome.windows.WINDOW_ID_CURRENT},
         function(tab) {

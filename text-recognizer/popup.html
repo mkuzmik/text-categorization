@@ -2,14 +2,38 @@
 <html>
 <head>
     <script src="jquery.min.js"></script>
+    <script src="materialize.min.js"></script>
     <script src="popup.js"></script>
     <style>
-        body { width: 300px; }
-        textarea { width: 250px; height: 100px;}
+        body {
+            width: 300px;
+        }
     </style>
+    <link rel="stylesheet" href="materialize.min.css">
 </head>
 <body>
-<button id="paste">Paste Selection</button>
-<textarea id="text"> </textarea>
+<div class="container">
+    <button type="button"
+            class="waves-effect waves-teal btn-flat"
+            id="paste">
+        Paste Selection
+    </button>
+
+    <div class="input-field">
+    <textarea class="materialize-textarea"
+              id="text"></textarea>
+    </div>
+
+    <button type="button"
+            class="waves-effect waves-light btn-small center-block"
+            id="recognize">
+        Recognize
+    </button>
+
+    <div class="center-block">
+        <input disabled value="" id="result" type="text" class="center-align">
+    </div>
+
+</div>
 </body>
 </html>

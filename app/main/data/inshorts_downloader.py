@@ -20,7 +20,7 @@ class InshortsDownloader:
         (To be honest - category "World" doesn't make much sense)
         :param items_per_cat: items to fetch per category
         """
-        suggested_categories = ['business', 'sports', 'politics', 'technology', 'science', 'automobile']
+        suggested_categories = ['business', 'sports', 'politics', 'technology', 'entertainment']
 
         return self.extract_inshorts(suggested_categories, items_per_cat)
 

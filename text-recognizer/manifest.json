@@ -9,6 +9,7 @@
   },
   "permissions": [
     "tabs",
+    "contextMenus",
     "<all_urls>"
   ],
   "content_scripts": [
@@ -22,5 +23,8 @@
       "run_at": "document_start",
       "all_frames": true
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  }
 }

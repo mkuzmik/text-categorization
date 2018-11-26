@@ -1,16 +1,17 @@
 import boto3
 import dependency_injector.containers as containers
 import dependency_injector.providers as providers
+from config import CONFIG
 
 
 class DynamoDb(object):
 
     def __init__(self):
         self.resource = boto3.resource('dynamodb',
-                                       endpoint_url='http://192.168.99.100:8000',
-                                       region_name='us-west-1',
-                                       aws_access_key_id="anything",
-                                       aws_secret_access_key="anything")
+                                       endpoint_url=CONFIG.DYNAMO_DB['endpoint_url'],
+                                       region_name=CONFIG.DYNAMO_DB['region_name'],
+                                       aws_access_key_id=CONFIG.DYNAMO_DB['aws_access_key_id'],
+                                       aws_secret_access_key=CONFIG.DYNAMO_DB['aws_secret_access_key'])
         self.on_init()
 
         self.labeled_content = self.resource.Table('labeled_content')

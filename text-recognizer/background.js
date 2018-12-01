@@ -1,22 +1,25 @@
 // TODO: make parameters configurable
-textRecognizerHost= 'http://localhost:5000/predict?size=500&q=';
+defaultApiHost = 'http://localhost:5000';
+endpoint = '/predict?size=500&q=';
 
-function recognize(selectedText) {
-    var xhr = new XMLHttpRequest();
+const getHost = () => {
+    return new Promise((resolve, reject) =>
+        chrome.storage.local.get(['apiHost'], function (result) {
+            resolve(result.apiHost);
+        }));
+};
 
-    xhr.open("GET", textRecognizerHost + selectedText, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            alert(xhr.responseText);
-        }
-    };
-    xhr.send();
-}
+const recognize = async (selectedText) => {
+    const apiHost = await getHost() || defaultApiHost;
+    const response = await fetch(apiHost + endpoint + encodeURI(selectedText));
+    const body = await response.json();
+    alert(body);
+};
 
 chrome.contextMenus.create({
     title: "Recognize text",
-    contexts:["selection"],
-    onclick: function(info, tab) {
+    contexts: ["selection"],
+    onclick: function (info, tab) {
         recognize(info.selectionText);
     }
 });

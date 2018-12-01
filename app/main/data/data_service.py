@@ -1,6 +1,3 @@
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
-
 from app.main.data.inshorts_downloader import InshortsDownloaderContainer
 from app.main.data.repository import LabeledContentRepositoryContainer
 
@@ -29,7 +26,6 @@ class DataService(object):
         self.repository.write(data)
 
 
-class DataServiceContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(DataService,
-                                   repository=LabeledContentRepositoryContainer.instance(),
-                                   inshorts_downloader=InshortsDownloaderContainer.instance())
+class DataServiceContainer(object):
+    instance = DataService(repository=LabeledContentRepositoryContainer.instance,
+                           inshorts_downloader=InshortsDownloaderContainer.instance)

@@ -4,3 +4,7 @@
 venv/*
 .ipynb_checkpoints/
 instance/prod/*
+*.tar.gz
+*.zip
+*.pyc
+nltk_data/

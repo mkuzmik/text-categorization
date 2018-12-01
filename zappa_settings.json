@@ -1,0 +1,61 @@
+{
+  "dev": {
+    "app_function": "run.app",
+    "aws_region": "us-west-1",
+    "profile_name": "default",
+    "project_name": "inshorts-nlp",
+    "runtime": "python3.6",
+    "s3_bucket": "zappa-5s9r7yl6a",
+    "slim_handler": true,
+    "extra_permissions": [
+      {
+        "Sid": "VisualEditor0",
+        "Effect": "Allow",
+        "Action": [
+          "dynamodb:ListTables",
+          "dynamodb:DeleteItem",
+          "dynamodb:RestoreTableToPointInTime",
+          "dynamodb:PurchaseReservedCapacityOfferings",
+          "dynamodb:ListTagsOfResource",
+          "dynamodb:UpdateGlobalTable",
+          "dynamodb:CreateBackup",
+          "dynamodb:DeleteTable",
+          "dynamodb:UpdateContinuousBackups",
+          "dynamodb:DescribeReservedCapacityOfferings",
+          "dynamodb:TagResource",
+          "dynamodb:DescribeTable",
+          "dynamodb:GetItem",
+          "dynamodb:DescribeContinuousBackups",
+          "dynamodb:CreateGlobalTable",
+          "dynamodb:DescribeLimits",
+          "dynamodb:BatchGetItem",
+          "dynamodb:UpdateTimeToLive",
+          "dynamodb:BatchWriteItem",
+          "dynamodb:ConditionCheckItem",
+          "dynamodb:UntagResource",
+          "dynamodb:PutItem",
+          "dynamodb:ListBackups",
+          "dynamodb:Scan",
+          "dynamodb:Query",
+          "dynamodb:DescribeStream",
+          "dynamodb:UpdateItem",
+          "dynamodb:DescribeTimeToLive",
+          "dynamodb:ListStreams",
+          "dynamodb:CreateTable",
+          "dynamodb:UpdateGlobalTableSettings",
+          "dynamodb:DescribeGlobalTableSettings",
+          "dynamodb:ListGlobalTables",
+          "dynamodb:GetShardIterator",
+          "dynamodb:DescribeGlobalTable",
+          "dynamodb:DescribeReservedCapacity",
+          "dynamodb:RestoreTableFromBackup",
+          "dynamodb:DescribeBackup",
+          "dynamodb:DeleteBackup",
+          "dynamodb:UpdateTable",
+          "dynamodb:GetRecords"
+        ],
+        "Resource": "*"
+      }
+    ]
+  }
+}

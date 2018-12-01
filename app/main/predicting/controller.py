@@ -11,7 +11,7 @@ class PredictCategoryController(Resource):
         return '/predict'
 
     def __init__(self):
-        self.predictor = PredictorContainer.instance()
+        self.predictor = PredictorContainer.instance
 
     def get(self):
         """

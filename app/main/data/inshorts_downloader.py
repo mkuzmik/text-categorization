@@ -1,15 +1,9 @@
 import json
-from flask import current_app as app
 from json import JSONDecodeError
 
-import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-
-from app.main.predicting.pandas_util import PandasUtil
-
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
+from flask import current_app as app
 
 
 class InshortsDownloader:
@@ -77,5 +71,5 @@ class InshortsDownloader:
             print('ERROR: cannot deserialize json: ' + serialized)
 
 
-class InshortsDownloaderContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(InshortsDownloader)
+class InshortsDownloaderContainer():
+    instance = InshortsDownloader()

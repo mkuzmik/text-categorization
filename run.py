@@ -19,13 +19,5 @@ add_resource(api, MigrationController)
 add_resource(api, LabeledContentController)
 
 
-def load_config():
-    if app.config['ENV'] == 'production':
-        app.config.from_object('instance.prod.production.ProdConfig')
-    else:
-        app.config.from_object('instance.dev.development.DevConfig')
-
-
 if __name__ == '__main__':
-    load_config()
     app.run(debug=app.config['DEBUG'])

@@ -1,5 +1,3 @@
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
 from sklearn.naive_bayes import MultinomialNB
 
 from app.main.data.repository import LabeledContentRepositoryContainer
@@ -34,9 +32,7 @@ class Predictor:
         return data_set.head(dataset_size)
 
 
-class PredictorContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(Predictor,
-                                   repository=LabeledContentRepositoryContainer.instance(),
-                                   text_processor=TextProcessingContainer.instance(),
-                                   text_transformer=TextTransformerContainer.instance()
-                                   )
+class PredictorContainer(object):
+    instance = Predictor(repository=LabeledContentRepositoryContainer.instance,
+                         text_processor=TextProcessingContainer.instance,
+                         text_transformer=TextTransformerContainer.instance)

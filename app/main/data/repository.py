@@ -1,6 +1,3 @@
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
-
 from app.main.data.dynamo_db import DynamoDbContainer
 
 
@@ -38,6 +35,5 @@ class LabeledContentRepository(object):
             raise Exception('Only list or dict are acceptable')
 
 
-class LabeledContentRepositoryContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(LabeledContentRepository,
-                                   dynamo_connection=DynamoDbContainer.instance())
+class LabeledContentRepositoryContainer(object):
+    instance = LabeledContentRepository(dynamo_connection=DynamoDbContainer.instance)

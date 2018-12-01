@@ -1,6 +1,5 @@
 import boto3
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
+
 from config import CONFIG
 
 
@@ -17,6 +16,7 @@ class DynamoDb(object):
         self.labeled_content = self.resource.Table('labeled_content')
 
     def on_init(self):
+        # TODO get rid of this weird check
         if len(list(self.resource.tables.all())) > 0:
             return
 
@@ -50,5 +50,6 @@ class DynamoDb(object):
         )
 
 
-class DynamoDbContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(DynamoDb)
+class DynamoDbContainer(object):
+    instance = DynamoDb()
+

@@ -15,21 +15,19 @@ class DynamoDb(object):
                                        region_name=CONFIG.DYNAMO_DB['region_name'],
                                        aws_access_key_id=CONFIG.DYNAMO_DB['aws_access_key_id'],
                                        aws_secret_access_key=CONFIG.DYNAMO_DB['aws_secret_access_key'])
-        self.on_init()
 
-        self.labeled_content = self.resource.Table('labeled_content')
+        self.content_by_label = self.init_content_by_label()
+        self.content_by_source = self.init_content_by_source()
         logger.info('DynamoDB connection ready')
 
-    def on_init(self):
-        # TODO get rid of this weird check
-        if len(list(self.resource.tables.all())) > 0:
-            logger.info('Table labeled_content already exists, skipping creation')
-            return
+    def table_exists(self, table_name):
+        existing_tables = list(self.resource.tables.all())
+        return table_name in list(map(lambda x: x.name, existing_tables))
 
-        logger.info('Creating labeled_content table')
-        self.resource.create_table(
-            TableName='labeled_content',
-            KeySchema=[
+    def init_content_by_label(self):
+        return self.init_table(
+            table_name='content_by_label',
+            key_schema=[
                 {
                     'AttributeName': 'label',
                     'KeyType': 'HASH'
@@ -39,7 +37,7 @@ class DynamoDb(object):
                     'KeyType': 'RANGE'
                 }
             ],
-            AttributeDefinitions=[
+            attribute_definitions=[
                 {
                     'AttributeName': 'label',
                     'AttributeType': 'S'
@@ -49,12 +47,52 @@ class DynamoDb(object):
                     'AttributeType': 'S'
                 }
 
+            ]
+        )
+
+    def init_content_by_source(self):
+        return self.init_table(
+            table_name='content_by_source',
+            key_schema=[
+                {
+                    'AttributeName': 'source',
+                    'KeyType': 'HASH'
+                },
+                {
+                    'AttributeName': 'content',
+                    'KeyType': 'RANGE'
+                }
             ],
+            attribute_definitions=[
+                {
+                    'AttributeName': 'source',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'content',
+                    'AttributeType': 'S'
+                }
+
+            ]
+        )
+
+    def init_table(self, table_name, key_schema, attribute_definitions):
+        if self.table_exists(table_name):
+            logger.info('Table %s already exists, skipping creation', table_name)
+            return
+
+        logger.info('Creating %s table', table_name)
+        self.resource.create_table(
+            TableName=table_name,
+            KeySchema=key_schema,
+            AttributeDefinitions=attribute_definitions,
             ProvisionedThroughput={
                 'ReadCapacityUnits': 10,
                 'WriteCapacityUnits': 10
             }
         )
+
+        return self.resource.Table(table_name)
 
 
 class DynamoDbContainer(object):

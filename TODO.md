@@ -20,3 +20,6 @@ to "Prediction chain" when new label is found.
 
 ### Presentation
 Chrome extension. When selecting any text it predict its labels.
+
+### Clustering
+Data from https://newsapi.org/

@@ -1,6 +1,10 @@
+import logging
+
+
 class Config(object):
     # runtime properties
-    DEBUG = False
+    DEBUG = True
+    LOGGING_LEVEL = logging.DEBUG
 
     # dynamo db properties
     DYNAMO_DB = {

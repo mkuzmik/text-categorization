@@ -1,20 +1,20 @@
-from sklearn.naive_bayes import MultinomialNB
-
-from app.main.data.repository import LabeledContentRepositoryContainer
 from app.main.predicting.pandas_util import PandasUtil
-from app.main.predicting.text_processing import TextProcessingContainer
-from app.main.predicting.text_transformer import TextTransformerContainer
+from app.main.tools import logging
+
+logger = logging.get_logger('TfidfPredictor')
 
 
-class Predictor:
-    def __init__(self, repository, text_processor, text_transformer):
+class TfidfPredictor(object):
+    def __init__(self, repository, text_processor, text_transformer, model):
         self.repository = repository
         self.text_processor = text_processor
         self.text_transformer = text_transformer
+        self.model = model
 
     def predict(self, text, dataset_size):
         X, y, transformed_input = self.prepare_data(text, dataset_size)
-        model = MultinomialNB()
+        model = self.model
+        logger.info('Learning model %s with TFIDF transformed data', self.model.__class__.__name__)
         model.fit(X, y)
         predicted = model.predict(transformed_input)
         return predicted.item()
@@ -27,12 +27,7 @@ class Predictor:
         return X, data_set.label.tolist(), transformed_text
 
     def get_dataset(self, dataset_size):
-        data_set = PandasUtil.to_df(self.repository.scan())
+        items = self.repository.scan()
+        data_set = PandasUtil.to_df(items)
         data_set = PandasUtil.shuffle(data_set)
         return data_set.head(dataset_size)
-
-
-class PredictorContainer(object):
-    instance = Predictor(repository=LabeledContentRepositoryContainer.instance,
-                         text_processor=TextProcessingContainer.instance,
-                         text_transformer=TextTransformerContainer.instance)

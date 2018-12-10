@@ -1,5 +1,8 @@
 from app.main.data.inshorts_downloader import InshortsDownloaderContainer
 from app.main.data.repository import LabeledContentRepositoryContainer
+from app.main.tools import logging
+
+logger = logging.get_logger('DataService')
 
 
 class DataService(object):
@@ -13,6 +16,7 @@ class DataService(object):
         :param items_per_cat: amount of items to fetch per every category
         :return: fetched items
         """
+        logger.debug('Fetching %d items per cat from source %s', items_per_cat, source)
         if source == 'inshorts':
             return self.inshorts_downloader.download(items_per_cat)
         else:
@@ -23,6 +27,7 @@ class DataService(object):
         Fetches items from given source, of given amount and writes it to db.
         """
         data = self.fetch(source, items_per_cat)
+        logger.debug('Migrating %d items to DB', len(data))
         self.repository.write(data)
 
 

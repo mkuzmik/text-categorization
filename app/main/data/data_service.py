@@ -1,4 +1,4 @@
-from app.main.data.inshorts_downloader import InshortsDownloaderContainer
+from app.main.data.sources.inshorts_downloader import InshortsDownloaderContainer
 from app.main.data.repository import LabeledContentRepositoryContainer
 from app.main.tools import logging
 
@@ -27,8 +27,14 @@ class DataService(object):
         Fetches items from given source, of given amount and writes it to db.
         """
         data = self.fetch(source, items_per_cat)
+        data = self.__attach_source(data, source)
         logger.debug('Migrating %d items to DB', len(data))
         self.repository.write(data)
+
+    def __attach_source(self, data, source):
+        for entity in data:
+            entity['source'] = source
+        return data
 
 
 class DataServiceContainer(object):

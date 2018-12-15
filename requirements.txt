@@ -12,3 +12,4 @@ zappa
 python-dateutil<2.7.0,>=2.6.1
 ipython
 jupyter
+seaborn

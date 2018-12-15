@@ -8,7 +8,7 @@ class PredictCategoryController(Resource):
 
     @staticmethod
     def path():
-        return '/predict'
+        return '/classify'
 
     def get(self):
         """

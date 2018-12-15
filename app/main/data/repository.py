@@ -5,13 +5,14 @@ from boto3.dynamodb.conditions import Key, Attr
 class LabeledContentRepository(object):
     def __init__(self, dynamo_connection):
         self.dynamo_connection = dynamo_connection
-        self.table = self.dynamo_connection.content_by_label
+        self.by_label = self.dynamo_connection.content_by_label
+        self.by_source = self.dynamo_connection.content_by_source
 
     def scan(self):
-        return self.table.scan()["Items"]
+        return self.by_label.scan()["Items"]
 
     def get_by_label(self, label):
-        response = self.table.query(
+        response = self.by_label.query(
             KeyConditionExpression=Key('label').eq(label)
         )
         return response['Items']
@@ -32,9 +33,18 @@ class LabeledContentRepository(object):
             source = str(data['source'])
             content = str(data['content'])
 
-            self.table.put_item(
+            self.by_label.put_item(
                 Item={
                     'label': label,
+                    'source': source,
+                    'content': content
+                }
+            )
+
+            self.by_source.put_item(
+                Item={
+                    'label': label,
+                    'source': source,
                     'content': content
                 }
             )

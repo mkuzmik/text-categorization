@@ -1,5 +1,7 @@
 import logging
 
+from instance.secrets import Secrets
+
 
 class Config(object):
     # runtime properties
@@ -13,3 +15,5 @@ class Config(object):
         'aws_access_key_id': 'whatever',
         'aws_secret_access_key': 'whatever'
     }
+
+    SECRETS = Secrets()

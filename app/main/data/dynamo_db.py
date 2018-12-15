@@ -72,14 +72,13 @@ class DynamoDb(object):
                     'AttributeName': 'content',
                     'AttributeType': 'S'
                 }
-
             ]
         )
 
     def init_table(self, table_name, key_schema, attribute_definitions):
         if self.table_exists(table_name):
             logger.info('Table %s already exists, skipping creation', table_name)
-            return
+            return self.resource.Table(table_name)
 
         logger.info('Creating %s table', table_name)
         self.resource.create_table(

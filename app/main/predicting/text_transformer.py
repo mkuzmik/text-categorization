@@ -15,6 +15,13 @@ class TextTransformer:
         transformed = self.transform_tfidf(test + train)
         return transformed[:len(test)], transformed[len(test):]
 
+    def transform_bow(self, data):
+        return self.count_vect.fit_transform(data)
+
+    def transform_bow_tt(self, test, train):
+        transformed = self.transform_bow(test + train)
+        return transformed[:len(test)], transformed[len(test):]
+
 
 class TextTransformerContainer(object):
     instance = TextTransformer()

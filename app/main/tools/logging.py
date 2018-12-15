@@ -1,4 +1,5 @@
 import logging
+
 from config import CONFIG
 
 formatter = logging.Formatter('[%(asctime)s] %(levelname)s in %(name)s: %(message)s')

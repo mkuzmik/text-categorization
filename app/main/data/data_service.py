@@ -1,14 +1,16 @@
 from app.main.data.sources.inshorts_downloader import InshortsDownloaderContainer
 from app.main.data.repository import LabeledContentRepositoryContainer
+from app.main.data.sources.news_api_downloader import NewsApiDownloaderContainer
 from app.main.tools import logging
 
 logger = logging.get_logger('DataService')
 
 
 class DataService(object):
-    def __init__(self, repository, inshorts_downloader):
+    def __init__(self, repository, inshorts_downloader, news_api_downloader):
         self.repository = repository
         self.inshorts_downloader = inshorts_downloader
+        self.news_api_downloader = news_api_downloader
 
     def fetch(self, source, items_per_cat):
         """
@@ -19,6 +21,8 @@ class DataService(object):
         logger.debug('Fetching %d items per cat from source %s', items_per_cat, source)
         if source == 'inshorts':
             return self.inshorts_downloader.download(items_per_cat)
+        if source == 'news-api':
+            return self.news_api_downloader.download(items_per_cat)
         else:
             raise Exception('Unknown source')
 
@@ -39,4 +43,5 @@ class DataService(object):
 
 class DataServiceContainer(object):
     instance = DataService(repository=LabeledContentRepositoryContainer.instance,
-                           inshorts_downloader=InshortsDownloaderContainer.instance)
+                           inshorts_downloader=InshortsDownloaderContainer.instance,
+                           news_api_downloader=NewsApiDownloaderContainer.instance)

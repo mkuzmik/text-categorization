@@ -71,5 +71,5 @@ class InshortsDownloader:
             print('ERROR: cannot deserialize json: ' + serialized)
 
 
-class InshortsDownloaderContainer():
+class InshortsDownloaderContainer(object):
     instance = InshortsDownloader()

@@ -1,6 +1,12 @@
+import logging
+
+from instance.secrets import Secrets
+
+
 class Config(object):
     # runtime properties
-    DEBUG = False
+    DEBUG = True
+    LOGGING_LEVEL = logging.DEBUG
 
     # dynamo db properties
     DYNAMO_DB = {
@@ -9,3 +15,5 @@ class Config(object):
         'aws_access_key_id': 'whatever',
         'aws_secret_access_key': 'whatever'
     }
+
+    SECRETS = Secrets()

@@ -3,7 +3,10 @@ from json import JSONDecodeError
 
 import requests
 from bs4 import BeautifulSoup
-from flask import current_app as app
+
+from app.main.tools import logging
+
+LOGGER = logging.get_logger('InshortsDownloader')
 
 
 class InshortsDownloader:
@@ -11,11 +14,10 @@ class InshortsDownloader:
     def download(self, items_per_cat):
         """
         Extracts inshorts only for suggested categories
-        (To be honest - category "World" doesn't make much sense)
+        (To be honest - category World doesn't make much sense)
         :param items_per_cat: items to fetch per category
         """
         suggested_categories = ['business', 'sports', 'politics', 'technology', 'entertainment']
-
         return self.extract_inshorts(suggested_categories, items_per_cat)
 
     def extract_inshorts(self, categories, items_per_cat):
@@ -28,7 +30,7 @@ class InshortsDownloader:
         """
         result = []
         for category in categories:
-            app.logger.info("Downloading stories for %s", category)
+            LOGGER.info("Downloading stories for %s", category)
             labeled = []
             offset = ''
             while len(labeled) < items_per_cat:

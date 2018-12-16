@@ -4,4 +4,4 @@ from instance.prod.production import ProdConfig
 
 DEV_CONFIG = DevConfig()
 PROD_CONFIG = ProdConfig()
-CONFIG = PROD_CONFIG if os.environ.get('ENV', 'development') == 'production' else DEV_CONFIG
+CONFIG = PROD_CONFIG if os.environ.get('FLASK_ENV', 'development') == 'production' else DEV_CONFIG

@@ -7,6 +7,9 @@
     "runtime": "python3.6",
     "s3_bucket": "zappa-5s9r7yl6a",
     "slim_handler": true,
+    "environment_variables": {
+      "FLASK_ENV": "production"
+    },
     "extra_permissions": [
       {
         "Sid": "VisualEditor0",

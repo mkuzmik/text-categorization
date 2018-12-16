@@ -11,7 +11,7 @@ from app.main.predicting.text_transformer import TextTransformerContainer
 class PredictorContainer(object):
     instances = {
         'naive-bayes': MultinomialNB,
-        'svm': SVC,
+        'svm': SVC(kernel="linear", C=0.025),
         'k-neighbours': KNeighborsClassifier
     }
 

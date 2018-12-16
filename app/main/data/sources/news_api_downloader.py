@@ -18,11 +18,11 @@ class NewsApiDownloader:
         res = []
         for cat in suggested_categories:
             LOGGER.info('Downloading articles for {}'.format(cat))
-            res.append(self._get_by_category(cat, 100))
+            res = res + self._get_by_category(cat)
 
         return res
 
-    def _get_by_category(self, category, count):
+    def _get_by_category(self, category):
         # TODO configurable source
         endpoint = self.__get_endpoint('everything', category)
         resp = requests.get(endpoint)

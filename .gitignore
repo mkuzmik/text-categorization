@@ -3,3 +3,9 @@
 *__pycache__*
 venv/*
 .ipynb_checkpoints/
+instance/prod/*
+secrets.py
+*.tar.gz
+*.zip
+*.pyc
+nltk_data/

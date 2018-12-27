@@ -8,3 +8,8 @@ matplotlib
 sklearn
 boto3
 dependency_injector
+zappa
+python-dateutil<2.7.0,>=2.6.1
+ipython
+jupyter
+seaborn

@@ -11,7 +11,7 @@ class DownloadController(Resource):
         return '/data/download'
 
     def __init__(self):
-        self.data_service = DataServiceContainer.instance()
+        self.data_service = DataServiceContainer.instance
         self.parser = reqparse.RequestParser()
 
     def get(self):
@@ -36,7 +36,7 @@ class MigrationController(Resource):
         return '/data/migration'
 
     def __init__(self):
-        self.data_service = DataServiceContainer.instance()
+        self.data_service = DataServiceContainer.instance
         self.parser = reqparse.RequestParser()
 
     def post(self):
@@ -54,7 +54,7 @@ class LabeledContentController(Resource):
         return '/data/labeled-content'
 
     def __init__(self):
-        self.repository = LabeledContentRepositoryContainer.instance()
+        self.repository = LabeledContentRepositoryContainer.instance
 
     def get(self):
         """

@@ -1,5 +1,3 @@
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 
@@ -17,6 +15,13 @@ class TextTransformer:
         transformed = self.transform_tfidf(test + train)
         return transformed[:len(test)], transformed[len(test):]
 
+    def transform_bow(self, data):
+        return self.count_vect.fit_transform(data)
 
-class TextTransformerContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(TextTransformer)
+    def transform_bow_tt(self, test, train):
+        transformed = self.transform_bow(test + train)
+        return transformed[:len(test)], transformed[len(test):]
+
+
+class TextTransformerContainer(object):
+    instance = TextTransformer()

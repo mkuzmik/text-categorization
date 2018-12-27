@@ -9,7 +9,9 @@
   },
   "permissions": [
     "tabs",
-    "<all_urls>"
+    "contextMenus",
+    "<all_urls>",
+    "storage"
   ],
   "content_scripts": [
     {
@@ -22,5 +24,12 @@
       "run_at": "document_start",
       "all_frames": true
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
+  }
 }

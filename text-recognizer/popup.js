@@ -3,7 +3,7 @@ $(function(){
 });
 
 $(function(){
-    $('#recognize').click(function(){recognize();});
+    $('#recognize').click(function(){getResult();});
 });
 
 function pasteSelection() {
@@ -11,26 +11,37 @@ function pasteSelection() {
         function(tab) {
             chrome.tabs.sendMessage(tab[0].id, {method: "getSelection"},
                 function(response){
-                    var text = document.getElementById('text');
-                    text.innerHTML = response.data;
+                    const text = document.getElementById('text');
+                    text.value = response.data;
                     M.textareaAutoResize(text);
                 });
         });
 }
 
-// TODO: make parameters configurable
-textRecognizerHost= 'http://localhost:5000/predict?size=200&q=';
+const getParameters = () => {
+    return new Promise(resolve => {
+        chrome.storage.sync.get({
+            // default values
+            apiHost: 'http://localhost:5000',
+            model: 'naive-bayes',
+            size: '500'
+        }, function (items) {
+            resolve(items);
+        });
+    });
+};
 
-function recognize() {
-    var result = document.getElementById('result');
-    var text = document.getElementById('text');
-    var xhr = new XMLHttpRequest();
+const recognize = async (text) => {
+    const parameters = await getParameters();
+    const urlWithParams = `${parameters.apiHost}/classify?q=${encodeURI(text)}&model=${parameters.model}&size=${parameters.size}`;
+    const response = await fetch(urlWithParams);
+    return await response.json();
+};
 
-    xhr.open("GET", textRecognizerHost + text.innerHTML, true);
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-            result.value = xhr.responseText;
-        }
-    };
-    xhr.send();
+async function getResult() {
+    const result = document.getElementById('result');
+    const text = document.getElementById('text');
+    const xhr = new XMLHttpRequest();
+
+    result.value = await recognize(text.value);
 }

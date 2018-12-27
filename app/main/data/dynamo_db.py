@@ -1,27 +1,33 @@
 import boto3
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
+
+from app.main.tools import logging
+from config import CONFIG
+
+logger = logging.get_logger('DynamoDb')
 
 
 class DynamoDb(object):
 
     def __init__(self):
+        logger.info('Initializing DynamoDB connection')
         self.resource = boto3.resource('dynamodb',
-                                       endpoint_url='http://192.168.99.100:8000',
-                                       region_name='us-west-1',
-                                       aws_access_key_id="anything",
-                                       aws_secret_access_key="anything")
-        self.on_init()
+                                       endpoint_url=CONFIG.DYNAMO_DB['endpoint_url'],
+                                       region_name=CONFIG.DYNAMO_DB['region_name'],
+                                       aws_access_key_id=CONFIG.DYNAMO_DB['aws_access_key_id'],
+                                       aws_secret_access_key=CONFIG.DYNAMO_DB['aws_secret_access_key'])
 
-        self.labeled_content = self.resource.Table('labeled_content')
+        self.content_by_label = self.init_content_by_label()
+        self.content_by_source = self.init_content_by_source()
+        logger.info('DynamoDB connection ready')
 
-    def on_init(self):
-        if len(list(self.resource.tables.all())) > 0:
-            return
+    def table_exists(self, table_name):
+        existing_tables = list(self.resource.tables.all())
+        return table_name in list(map(lambda x: x.name, existing_tables))
 
-        self.resource.create_table(
-            TableName='labeled_content',
-            KeySchema=[
+    def init_content_by_label(self):
+        return self.init_table(
+            table_name='content_by_label',
+            key_schema=[
                 {
                     'AttributeName': 'label',
                     'KeyType': 'HASH'
@@ -31,7 +37,7 @@ class DynamoDb(object):
                     'KeyType': 'RANGE'
                 }
             ],
-            AttributeDefinitions=[
+            attribute_definitions=[
                 {
                     'AttributeName': 'label',
                     'AttributeType': 'S'
@@ -41,13 +47,52 @@ class DynamoDb(object):
                     'AttributeType': 'S'
                 }
 
+            ]
+        )
+
+    def init_content_by_source(self):
+        return self.init_table(
+            table_name='content_by_source',
+            key_schema=[
+                {
+                    'AttributeName': 'source',
+                    'KeyType': 'HASH'
+                },
+                {
+                    'AttributeName': 'content',
+                    'KeyType': 'RANGE'
+                }
             ],
+            attribute_definitions=[
+                {
+                    'AttributeName': 'source',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'content',
+                    'AttributeType': 'S'
+                }
+            ]
+        )
+
+    def init_table(self, table_name, key_schema, attribute_definitions):
+        if self.table_exists(table_name):
+            logger.info('Table %s already exists, skipping creation', table_name)
+            return self.resource.Table(table_name)
+
+        logger.info('Creating %s table', table_name)
+        self.resource.create_table(
+            TableName=table_name,
+            KeySchema=key_schema,
+            AttributeDefinitions=attribute_definitions,
             ProvisionedThroughput={
                 'ReadCapacityUnits': 10,
                 'WriteCapacityUnits': 10
             }
         )
 
+        return self.resource.Table(table_name)
 
-class DynamoDbContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(DynamoDb)
+
+class DynamoDbContainer(object):
+    instance = DynamoDb()

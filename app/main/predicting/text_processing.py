@@ -2,8 +2,6 @@ import re
 import unicodedata
 from functools import reduce
 
-import dependency_injector.containers as containers
-import dependency_injector.providers as providers
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize.toktok import ToktokTokenizer
@@ -14,6 +12,8 @@ class TextProcessor:
     def __init__(self):
         self.tokenizer = ToktokTokenizer()
         self.lemmatizer = WordNetLemmatizer()
+
+        nltk.data.path.append('./nltk_data')
         self.stopword_list = nltk.corpus.stopwords.words('english')
 
     def remove_accented_chars(self, text):
@@ -64,5 +64,5 @@ class TextProcessingChain:
         return reduce(lambda res, fun: list(map(fun, res)), self.applies, series)
 
 
-class TextProcessingContainer(containers.DeclarativeContainer):
-    instance = providers.Singleton(TextProcessingChain)
+class TextProcessingContainer(object):
+    instance = TextProcessingChain()

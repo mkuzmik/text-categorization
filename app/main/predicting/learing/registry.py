@@ -10,9 +10,9 @@ from app.main.predicting.text_transformer import TextTransformerContainer
 
 class PredictorContainer(object):
     instances = {
-        'naive-bayes': MultinomialNB,
+        'naive-bayes': MultinomialNB(),
         'svm': SVC(kernel="linear", C=0.025),
-        'k-neighbours': KNeighborsClassifier
+        'k-neighbours': KNeighborsClassifier()
     }
 
     default = instances['naive-bayes']
@@ -23,4 +23,4 @@ class PredictorContainer(object):
         return TfidfPredictor(repository=LabeledContentRepositoryContainer.instance,
                               text_processor=TextProcessingContainer.instance,
                               text_transformer=TextTransformerContainer.instance,
-                              model=model_class())
+                              model=model_class)

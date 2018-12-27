@@ -1,18 +1,17 @@
 {
   "dev": {
     "app_function": "run.app",
-    "aws_region": "us-west-1",
+    "aws_region": "eu-central-1",
     "profile_name": "default",
     "project_name": "inshorts-nlp",
     "runtime": "python3.6",
-    "s3_bucket": "zappa-5s9r7yl6a",
+    "s3_bucket": "testasadasdasda",
     "slim_handler": true,
     "environment_variables": {
       "FLASK_ENV": "production"
     },
     "extra_permissions": [
       {
-        "Sid": "VisualEditor0",
         "Effect": "Allow",
         "Action": [
           "dynamodb:ListTables",

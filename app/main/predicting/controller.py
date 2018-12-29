@@ -10,6 +10,10 @@ class PredictCategoryController(Resource):
     def path():
         return '/classify'
 
+    def post(self):
+        # alias for get method
+        return self.get()
+
     def get(self):
         """
         Parameters:
@@ -22,5 +26,8 @@ class PredictCategoryController(Resource):
         parser.add_argument('size')
         parser.add_argument('model')
         args = parser.parse_args()
-        return PredictorContainer.resolve(args.model).predict(args.q, int(args.size))
+        predicted_label = PredictorContainer.resolve(args.model).predict(args.q, int(args.size))
+        return {
+            'label': predicted_label
+        }
 

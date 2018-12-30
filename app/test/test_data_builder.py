@@ -1,5 +1,6 @@
 import json
 from pprint import pprint
+from collections import Counter
 
 import requests
 from bs4 import BeautifulSoup
@@ -46,21 +47,33 @@ def extract_label(url):
 def save_generated_data(seed_file_name, data):
     filename = "./resources/generated/generated_" + seed_file_name
     with open(filename, 'w') as file:
-       file.write(json.dumps(data))
+        file.write(json.dumps(data))
 
 
 if __name__ == '__main__':
-    seed_file = 'seed.json'
+    seed_file = 'generated_seed.json'
     seeds = load_seed_file(seed_file)
+    labels_list = []
     data_list = []
 
+    print('Building test data, {} urls found', len(seeds))
+    processed = 0
+
     for seed_url in seeds:
+        label = extract_label(seed_url)
+        labels_list += [label]
+        content = extract_content(seed_url)
+        if content is None or len(content) < 20:
+            continue
         data_list += [
             {
                 'url': seed_url,
-                'content': extract_content(seed_url),
-                'label': extract_label(seed_url)
+                'content': content,
+                'label': label
             }
         ]
+        processed += 1
+        print("{}/{} articles fetched".format(processed, len(seeds)))
 
     save_generated_data(seed_file, data_list)
+    pprint(Counter(labels_list))

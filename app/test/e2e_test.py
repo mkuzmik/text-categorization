@@ -71,4 +71,4 @@ def perform_test(data, model, dataset_size):
 
 if __name__ == '__main__':
     data = load_and_validate('generated/generated_generated_seed.json')
-    pprint(perform_test(data, 'naive-bayes', 200))
+    pprint(perform_test(data, 'naive-bayes', 2500))

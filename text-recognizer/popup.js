@@ -43,5 +43,6 @@ async function getResult() {
     const text = document.getElementById('text');
     const xhr = new XMLHttpRequest();
 
-    result.value = await recognize(text.value);
+    const res = await recognize(text.value);
+    result.value = res.label;
 }

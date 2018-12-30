@@ -4,7 +4,7 @@ from pprint import pprint
 from queue import Queue
 from urllib.parse import urlparse
 
-import requests
+from app.test.cached_requests import CachedRequest
 from bs4 import BeautifulSoup
 
 start_urls = [
@@ -13,6 +13,8 @@ start_urls = [
 ]
 
 limit_per_pattern = 20
+
+requests = CachedRequest()
 
 
 def start_queue():
@@ -39,7 +41,7 @@ def extract_all_hrefs(html):
 def extract_urls_from(url):
     host = '{uri.scheme}://{uri.netloc}'.format(uri=urlparse(url))
     resp = requests.get(url)
-    hrefs = extract_all_hrefs(resp.text)
+    hrefs = extract_all_hrefs(resp)
     return list(map(lambda x: host + x if x[0] == '/' else x, hrefs))
 
 
@@ -74,12 +76,12 @@ if __name__ == '__main__':
     urls = []
     q = start_queue()
     iter = 1
-    while not q.empty():
+    while not q.empty() and not limits_exceeded():
         for url in start_urls:
             new_urls = extract_and_validate_urls_from(q.get())
             for u in new_urls:
                 if u['url'] not in urls and FILTER_PATTERNS[u['pattern']] < limit_per_pattern:
-                    urls += u['url']
+                    urls += [u['url']]
                     FILTER_PATTERNS[u['pattern']] += 1
                     q.put(u['url'])
         pprint(
@@ -91,3 +93,4 @@ if __name__ == '__main__':
         iter += 1
 
     save_generated_data('seed.json', urls)
+    requests.persist()

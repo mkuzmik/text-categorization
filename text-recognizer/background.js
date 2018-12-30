@@ -23,6 +23,6 @@ chrome.contextMenus.create({
     contexts: ["selection"],
     onclick: async (info) => {
         const blob = await recognize(info.selectionText);
-        alert(blob);
+        alert(JSON.stringify(blob));
     }
 });

@@ -2,12 +2,13 @@ import json
 from pprint import pprint
 from collections import Counter
 
-import requests
+from app.test.cached_requests import CachedRequest
 from bs4 import BeautifulSoup
 
 # WATCH OUT sports -> sport
 LABELS = ['business', 'sports', 'politics', 'technology', 'entertainment']
 
+requests = CachedRequest()
 
 def load_seed_file(filename):
     resources_filename = './resources/seeds/' + filename
@@ -21,7 +22,7 @@ def load_seed_file(filename):
 def extract_content(url):
     try:
         resp = requests.get(url)
-        soup = BeautifulSoup(resp.text, 'html.parser')
+        soup = BeautifulSoup(resp, 'html.parser')
         story_body = soup.find("div", {"property": "articleBody"})
         if story_body is None:
             story_body = soup.find("div", {"id": "story-body"})
@@ -61,10 +62,10 @@ if __name__ == '__main__':
 
     for seed_url in seeds:
         label = extract_label(seed_url)
-        labels_list += [label]
         content = extract_content(seed_url)
         if content is None or len(content) < 20:
             continue
+        labels_list += [label]
         data_list += [
             {
                 'url': seed_url,
@@ -77,3 +78,4 @@ if __name__ == '__main__':
 
     save_generated_data(seed_file, data_list)
     pprint(Counter(labels_list))
+    requests.persist()

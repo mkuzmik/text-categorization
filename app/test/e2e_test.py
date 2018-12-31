@@ -1,4 +1,5 @@
 import json
+import time
 from json import JSONDecodeError
 from pprint import pprint
 
@@ -13,6 +14,9 @@ def load_json_safely(serialized):
         return json.loads(serialized)
     except JSONDecodeError:
         print('ERROR: cannot deserialize json: {}'.format(serialized))
+        return {
+            'label': 'server error'
+        }
 
 
 def predict(content, model, dataset_size):
@@ -52,6 +56,8 @@ def perform_test(data, model, dataset_size):
         }
     }
 
+    start_time = time.time()
+
     for entity in data:
         predicted_label = predict(entity['content'], model, dataset_size)
         if entity['label'] == predicted_label:
@@ -66,9 +72,34 @@ def perform_test(data, model, dataset_size):
                 }
             ]
 
+    end_time = time.time()
+
+    result['execution_time'] = end_time - start_time
+
+    with open("./test_results.json", "a") as myfile:
+        myfile.write('\n' + json.dumps(result))
+
     return result
 
 
 if __name__ == '__main__':
     data = load_and_validate('generated/generated_generated_seed.json')
-    pprint(perform_test(data, 'naive-bayes', 2500))
+
+    models = [
+        'k-neighbours'
+    ]
+
+    sizes = [
+        10,
+        50,
+        100,
+        200,
+        500,
+        1000,
+        2000
+    ]
+
+    for model in models:
+        for size in sizes:
+            pprint(perform_test(data, model, size))
+

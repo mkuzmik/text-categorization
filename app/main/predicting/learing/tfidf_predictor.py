@@ -1,4 +1,5 @@
 from app.main.predicting.pandas_util import PandasUtil
+import pandas as pd
 from app.main.tools import logging
 
 logger = logging.get_logger('TfidfPredictor')
@@ -30,4 +31,11 @@ class TfidfPredictor(object):
         items = self.repository.scan()
         data_set = PandasUtil.to_df(items)
         data_set = PandasUtil.shuffle(data_set)
-        return data_set.head(dataset_size)
+        labels = data_set['label'].unique()
+        labels_count = data_set['label'].nunique()
+        label_dfs = []
+        for label in labels:
+            label_dfs += [data_set[data_set.label == label].head(int(dataset_size/labels_count))]
+        concatenated = pd.concat(label_dfs)
+        logger.info('Learning dataset:\n%s', concatenated['label'].value_counts())
+        return concatenated

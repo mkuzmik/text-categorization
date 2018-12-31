@@ -12,7 +12,7 @@ start_urls = [
     'https://www.bbc.com/sport'
 ]
 
-limit_per_pattern = 20
+limit_per_pattern = 40
 
 requests = CachedRequest()
 
@@ -77,13 +77,12 @@ if __name__ == '__main__':
     q = start_queue()
     iter = 1
     while not q.empty() and not limits_exceeded():
-        for url in start_urls:
-            new_urls = extract_and_validate_urls_from(q.get())
-            for u in new_urls:
-                if u['url'] not in urls and FILTER_PATTERNS[u['pattern']] < limit_per_pattern:
-                    urls += [u['url']]
-                    FILTER_PATTERNS[u['pattern']] += 1
-                    q.put(u['url'])
+        new_urls = extract_and_validate_urls_from(q.get())
+        for u in new_urls:
+            if u['url'] not in urls and FILTER_PATTERNS[u['pattern']] < limit_per_pattern:
+                urls += [u['url']]
+                FILTER_PATTERNS[u['pattern']] += 1
+                q.put(u['url'])
         pprint(
             {
                 "iteration_no": iter,

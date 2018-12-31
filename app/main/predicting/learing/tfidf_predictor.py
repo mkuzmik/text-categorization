@@ -37,5 +37,4 @@ class TfidfPredictor(object):
         for label in labels:
             label_dfs += [data_set[data_set.label == label].head(int(dataset_size/labels_count))]
         concatenated = pd.concat(label_dfs)
-        logger.info('Learning dataset:\n%s', concatenated['label'].value_counts())
         return concatenated

@@ -76,7 +76,7 @@ def perform_test(data, model, dataset_size):
 
     result['execution_time'] = end_time - start_time
 
-    with open("./test_results.json", "a") as myfile:
+    with open("./test_results_shortened.json", "a") as myfile:
         myfile.write('\n' + json.dumps(result))
 
     return result
@@ -86,6 +86,8 @@ if __name__ == '__main__':
     data = load_and_validate('generated/generated_generated_seed.json')
 
     models = [
+        'naive-bayes',
+        'svm',
         'k-neighbours'
     ]
 
